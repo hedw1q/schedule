@@ -1,10 +1,14 @@
 package ru.hedw1q.DiplomaGroupingExtended.Service;
 
 import ru.hedw1q.DiplomaGroupingExtended.Entity.Detail;
+import ru.hedw1q.DiplomaGroupingExtended.Entity.Machine;
+import ru.hedw1q.DiplomaGroupingExtended.Entity.Operation;
 import ru.hedw1q.DiplomaGroupingExtended.Entity.Product;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -17,33 +21,33 @@ public class DAO {
     private DAO() {
     }
 
-    public static DAO getInstance(){
-        if (instance==null) {
-            instance=new DAO();
+    public static DAO getInstance() {
+        if (instance == null) {
+            instance = new DAO();
         }
         return instance;
     }
 
-    private static final String URL="jdbc:postgresql://localhost:5432/ScheduleDiploma";
-    private static final String LOGIN="postgres";
-    private static final String PASSWORD="admin" ;
+    private static final String URL = "jdbc:postgresql://localhost:5432/ScheduleDiploma";
+    private static final String LOGIN = "postgres";
+    private static final String PASSWORD = "admin";
     private static Connection connection;
 
     static {
         try {
-            connection= DriverManager.getConnection(URL,LOGIN,PASSWORD);
+            connection = DriverManager.getConnection(URL, LOGIN, PASSWORD);
         } catch (Exception throwables) {
             throwables.printStackTrace();
         }
     }
 
-    public void createProduct(Product product){
-        String SQL="INSERT INTO public.\"product\"(name,details_id) VALUES(?,?)";
+    public void createProduct(Product product) {
+        String SQL = "INSERT INTO public.\"product\"(name,details_id) VALUES(?,?)";
         try {
 
-            PreparedStatement preparedStatement=connection.prepareStatement(SQL);
-            List<Integer> subList=new ArrayList<>();
-            for(int i=0;i<product.getDetails().size();i++){
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+            List<Integer> subList = new ArrayList<>();
+            for (int i = 0; i < product.getDetails().size(); i++) {
                 subList.add(product.getDetails().get(i).getId());
             }
 
@@ -57,13 +61,13 @@ public class DAO {
         }
     }
 
-    public List<String> getProductNamesList(){
-        String SQL="SELECT name FROM public.\"product\"";
-        List <String> productNames=new ArrayList<>();
+    public LinkedList<String> getProductNamesList() {
+        String SQL = "SELECT name FROM public.\"product\"";
+        LinkedList<String> productNames = new LinkedList<>();
         try {
-            Statement statement=connection.createStatement();
-            ResultSet resultSet= statement.executeQuery(SQL);
-            while(resultSet.next()){
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(SQL);
+            while (resultSet.next()) {
                 productNames.add(resultSet.getString("name"));
             }
         } catch (Exception throwables) {
@@ -72,30 +76,61 @@ public class DAO {
         return productNames;
     }
 
-    public void createDetail(Detail detail){
-        String SQL="INSERT INTO public.\"detail\"(name,proctime,assemtime,id,product_id) VALUES(?,?,?,?,?)";
+    public LinkedList<Detail> getDetailsByProductId(int product_id) {
+        String SQL = "SELECT id FROM public.\"detail\" WHERE product_id=?";
+        LinkedList<Detail> details = new LinkedList<>();
         try {
-            PreparedStatement preparedStatement=connection.prepareStatement(SQL);
+            PreparedStatement statement = connection.prepareStatement(SQL);
+            statement.setInt(1, product_id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Detail detail = getDetailById(resultSet.getInt("id"));
+                details.add(detail);
+            }
+        } catch (Exception throwables) {
+            throwables.printStackTrace();
+        }
+
+        return details;
+    }
+
+    public void createDetail(Detail detail) {
+        String SQL = "INSERT INTO public.\"detail\"(name,procTime,assemtime,id,product_id,route,route_times) VALUES(?,?,?,?,?,?,?)";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
             preparedStatement.setString(1, detail.getName());
-            preparedStatement.setInt(2,detail.getProcTime());
-            preparedStatement.setInt(3,detail.getAssemTime());
-            preparedStatement.setInt(4,detail.getId());
-            preparedStatement.setInt(5,detail.getProduct_id());
+            preparedStatement.setInt(2, detail.computeProcTime());
+            preparedStatement.setInt(3, detail.getAssemTime());
+            preparedStatement.setInt(4, detail.getId());
+            preparedStatement.setInt(5, detail.getProduct_id());
+
+            List list1 = new LinkedList();
+            List list2 = new LinkedList();
+
+            for (int i = 0; i < detail.getOperations().size(); i++) {
+                list1.add(detail.getOperations().get(i).getMachine().getId());
+                list2.add(detail.getOperations().get(i).getTime());
+            }
+            preparedStatement.setArray(6, connection.createArrayOf("integer", list1.toArray()));
+            preparedStatement.setArray(7, connection.createArrayOf("integer", list2.toArray()));
+
             preparedStatement.executeUpdate();
 
         } catch (Exception throwables) {
             throwables.printStackTrace();
         }
     }
-public void deleteAllDetails(){
-    String SQL="DELETE FROM public.\"detail\";";
-    try {
-        PreparedStatement preparedStatement=connection.prepareStatement(SQL);
-        preparedStatement.execute();
-    } catch (Exception throwables) {
-        throwables.printStackTrace();
+
+    public void deleteAllDetails() {
+        String SQL = "DELETE FROM public.\"detail\";";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+            preparedStatement.execute();
+        } catch (Exception throwables) {
+            throwables.printStackTrace();
+        }
     }
-}
+
     public Detail getDetailById(int id) {
         Detail detail = null;
         String SQL = "SELECT * FROM public.\"detail\" where id=?";
@@ -110,13 +145,23 @@ public void deleteAllDetails(){
             detail.setProcTime(resultSet.getInt("proctime"));
             detail.setAssemTime(resultSet.getInt("assemtime"));
             detail.setName(resultSet.getString("name"));
+            detail.setProduct_id(resultSet.getInt("product_id"));
+            int[] machineRoutes = (int[]) resultSet.getArray("route").getArray();
+            int[] routeTimes = (int[]) resultSet.getArray("route_times").getArray();
+            List<Operation> operations = new LinkedList<>();
+            for (int i = 0; i < machineRoutes.length; i++) {
+                operations.add(new Operation(new Machine(machineRoutes[i]), routeTimes[i]));
+            }
+            detail.setOperations(operations);
+
+
         } catch (Exception throwables) {
             throwables.printStackTrace();
         }
         return detail;
     }
 
-    public Product getProductByName(String name){
+    public Product getProductByName(String name) {
         Product product = null;
         String SQL = "SELECT * FROM public.\"product\" where name=?";
         try {
@@ -128,11 +173,11 @@ public void deleteAllDetails(){
             product = new Product();
             product.setId(resultSet.getInt("id"));
             product.setName(name);
-            Array array=resultSet.getArray("details_id");
-            Integer[] detail_ids=(Integer[])array.getArray();
-            List<Detail> detailList=new ArrayList<>();
-            for(int number:detail_ids){
-                Detail detail=getDetailById(number);
+            Array array = resultSet.getArray("details_id");
+            Integer[] detail_ids = (Integer[]) array.getArray();
+            List<Detail> detailList = new ArrayList<>();
+            for (int number : detail_ids) {
+                Detail detail = getDetailById(number);
                 detailList.add(detail);
             }
             product.setDetails(detailList);

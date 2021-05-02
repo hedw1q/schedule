@@ -1,19 +1,31 @@
 package ru.hedw1q.DiplomaGroupingExtended.Controllers;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.*;
+
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import jdk.nashorn.internal.ir.annotations.Ignore;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.fx.ChartViewer;
 import org.jfree.data.category.IntervalCategoryDataset;
+
 import org.jfree.data.gantt.Task;
 import org.jfree.data.gantt.TaskSeries;
 import org.jfree.data.gantt.TaskSeriesCollection;
 import ru.hedw1q.DiplomaGroupingExtended.Entity.Detail;
+import ru.hedw1q.DiplomaGroupingExtended.Entity.DetailGroup;
 import ru.hedw1q.DiplomaGroupingExtended.Entity.Product;
+import ru.hedw1q.DiplomaGroupingExtended.Service.Planner;
 import ru.hedw1q.DiplomaGroupingExtended.Service.ScheduleHandler;
 import ru.hedw1q.DiplomaGroupingExtended.Service.DAO;
 import ru.hedw1q.DiplomaGroupingExtended.Service.GanttChart;
@@ -26,6 +38,7 @@ import java.time.ZoneId;
 import java.util.*;
 
 import static ru.hedw1q.DiplomaGroupingExtended.Entity.DetailGroup.*;
+import static ru.hedw1q.DiplomaGroupingExtended.Service.GanttChart.getCategoryDataset;
 
 public class MainController implements Initializable {
 
@@ -66,74 +79,95 @@ public class MainController implements Initializable {
         DAO dao = DAO.getInstance();
         ScheduleHandler scheduleHandler = ScheduleHandler.getInstance();
 
-        Product product = dao.getProductByName(productComboBox.getValue());
-        LinkedList<Detail> detailList = new LinkedList<>(product.getDetails());
-        LinkedList<LinkedList<Detail>> groupList = scheduleHandler.schedule(detailList);
-        System.out.println(groupList);
-        plotGanttChart(getCategoryDataset(groupList));
 
-    }
+        LinkedList<Detail> detailList = new LinkedList<>();
 
-    private IntervalCategoryDataset getCategoryDataset(LinkedList<LinkedList<Detail>> groupList) {
 
-        TaskSeries series1 = new TaskSeries("Scheduled");
+        LinkedList<Detail> detA = new LinkedList<>(dao.getDetailsByProductId(1));
+        LinkedList<Detail> detB = new LinkedList<>(dao.getDetailsByProductId(2));
+        LinkedList<Detail> detC = new LinkedList<>(dao.getDetailsByProductId(3));
 
-        Task procTask = new Task("Механообработка",
-                Date.from(LocalDate.now().atTime(LocalTime.ofSecondOfDay(0)).atZone(ZoneId.systemDefault()).toInstant()),
-                Date.from(LocalDate.now().atTime(LocalTime.ofSecondOfDay(70000)).atZone(ZoneId.systemDefault()).toInstant())
-        );
-        Task assemTask = new Task("Сборка",
-                Date.from(LocalDate.now().atTime(LocalTime.ofSecondOfDay(0)).atZone(ZoneId.systemDefault()).toInstant()),
-                Date.from(LocalDate.now().atTime(LocalTime.ofSecondOfDay(70000)).atZone(ZoneId.systemDefault()).toInstant())
-        );
-        int procBuf = 0;
-        int assemBuf = getSumProc(groupList.get(0));
-        for (int i = 0; i < groupList.size(); i++) {
-
-            LinkedList<Detail> linkedList = new LinkedList<>(groupList.get(i));
-            if (assemBuf < (procBuf + getSumProc(linkedList))) {
-                assemBuf = procBuf + getSumProc(linkedList);
-            }
-            procTask.addSubtask(new Task("Механообработка",
-                    Date.from(LocalDate.now().atTime(LocalTime.ofSecondOfDay(60 * procBuf)).atZone(ZoneId.systemDefault()).toInstant()),
-                    Date.from(LocalDate.now().atTime(LocalTime.ofSecondOfDay(60 * (procBuf + getSumProc(linkedList)))).atZone(ZoneId.systemDefault()).toInstant())
-            ));
-            assemTask.addSubtask(new Task("Сборка",
-                    Date.from(LocalDate.now().atTime(LocalTime.ofSecondOfDay(60 * assemBuf)).atZone(ZoneId.systemDefault()).toInstant()),
-                    Date.from(LocalDate.now().atTime(LocalTime.ofSecondOfDay(60 * (assemBuf + getSumAssem(linkedList)))).atZone(ZoneId.systemDefault()).toInstant())
-            ));
-            procBuf += getSumProc(linkedList);
-            assemBuf += getSumAssem(linkedList);
+        for (int i = 0; i < detA.size(); i++) {
+            detailList.add(detA.get(i));
+            detailList.add(detB.get(i));
+            detailList.add(detC.get(i));
         }
+        LinkedList<Detail> copyDetailList = new LinkedList<>(detailList);
+        System.out.println(detailList);
 
-        series1.add(procTask);
-        series1.add(assemTask);
-        TaskSeriesCollection dataset = new TaskSeriesCollection();
-        dataset.add(series1);
 
-        return dataset;
+        Map<Integer, LinkedList<DetailGroup>> groupMap = scheduleHandler.schedule(detailList);
+        System.out.println(groupMap);
+
+        new Planner().planOrder(new GanttChart("Диаграмма Гантта").getGanttChartTab(getCategoryDataset(groupMap)),
+                createInfoTable(copyDetailList));
+
     }
 
-    public static void plotGanttChart(IntervalCategoryDataset categoryDataset){
-        SwingUtilities.invokeLater(() -> {
-            GanttChart example = new GanttChart("Диаграмма Гантта", categoryDataset);
-            example.setSize(1600, 300);
-            example.setLocationRelativeTo(null);
-            example.setVisible(true);
-        });
+    public static Tab createInfoTable(List<Detail> detailList) {
+
+        TableView<Detail> tableView = new TableView();
+
+        TableColumn<Detail, Integer> idCol = new TableColumn<>("ID Детали");
+        TableColumn<Detail, String> nameCol = new TableColumn<>("Наименование");
+        TableColumn<Detail, Integer> product_idCol = new TableColumn<>("ID изделия");
+
+        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        product_idCol.setCellValueFactory(new PropertyValueFactory<>("product_id"));
+
+        tableView.getColumns().addAll(idCol, nameCol, product_idCol);
+
+
+        tableView.setItems(FXCollections.observableList(detailList));
+
+        Tab tab1 = new Tab("Информация о деталях");
+
+        tab1.setContent(tableView);
+
+        return tab1;
+    }
+
+    public static void plotGanttChart(IntervalCategoryDataset categoryDataset) {
+
+//        SwingUtilities.invokeLater(() -> {
+//            GanttChart example = new GanttChart("Диаграмма Гантта", categoryDataset);
+//            example.setSize(1600, 300);
+//            example.setLocationRelativeTo(null);
+//            example.setVisible(true);
+
+//        });
     }
 
     public void createRandomDetails(ActionEvent event) {
         Random random = new Random();
         DAO dao = DAO.getInstance();
         dao.deleteAllDetails();
-        for (int i = 1; i < 61; i++) {
+        for (int i = 1; i < 21; i++) {
             Detail detail = new Detail();
             detail.setName("d" + i);
-            detail.setAssemTime(random.nextInt(25) + 5);
+            detail.setAssemTime(random.nextInt(65) + 5);
             detail.setProcTime(random.nextInt(25) + 5);
             detail.setId(i);
             detail.setProduct_id(1);
+            dao.createDetail(detail);
+        }
+        for (int i = 21; i < 41; i++) {
+            Detail detail = new Detail();
+            detail.setName("d" + i);
+            detail.setAssemTime(random.nextInt(65) + 5);
+            detail.setProcTime(random.nextInt(25) + 5);
+            detail.setId(i);
+            detail.setProduct_id(2);
+            dao.createDetail(detail);
+        }
+        for (int i = 41; i < 61; i++) {
+            Detail detail = new Detail();
+            detail.setName("d" + i);
+            detail.setAssemTime(random.nextInt(65) + 5);
+            detail.setProcTime(random.nextInt(25) + 5);
+            detail.setId(i);
+            detail.setProduct_id(3);
             dao.createDetail(detail);
         }
     }

@@ -6,71 +6,92 @@ import java.util.LinkedList;
  * @author hedw1q
  */
 public class DetailGroup {
-    private LinkedList<Detail> details;
-    private int procStartsOn;
-    private int procEndsOn;
-    private int assemStartsOn;
-    private int assemEndsOn;
 
-    public static int getSumProc(LinkedList<Detail> list){
-        int buf=0;
-        for(Detail detail:list){
-             buf+=detail.getProcTime();
-        }
-        return buf;
-    }
-    public static int getSumAssem(LinkedList<Detail> list){
-        int buf=0;
-        for(Detail detail:list){
-            buf+=detail.getAssemTime();
-        }
-        return buf;
+    private int procTime;
+    private int assemTime;
+    private int slipNumber;
+    private LinkedList<Detail> details = new LinkedList<>();
+
+
+    public DetailGroup(int slipNumber) {
+        this.slipNumber = slipNumber;
     }
 
-    public DetailGroup() {
-    }
-
-    public DetailGroup(LinkedList<Detail> details) {
+    public DetailGroup(LinkedList<Detail> details, int slipNumber) {
         this.details = details;
+        computeTimes();
+        this.slipNumber = slipNumber;
+    }
+
+    public void computeTimes() {
+        this.procTime = getSumProc(details);
+        this.assemTime = getSumAssem(details);
+    }
+
+
+    public void addDetail(Detail detail) {
+        getDetails().add(detail);
     }
 
     public LinkedList<Detail> getDetails() {
         return details;
     }
 
-    public void setDetails(LinkedList<Detail> detailList) {
-        this.details = detailList;
+    public void setDetails(LinkedList<Detail> details) {
+        this.details = details;
     }
 
-    public int getProcStartsOn() {
-        return procStartsOn;
+
+    public int getProcTime() {
+        return procTime;
     }
 
-    public void setProcStartsOn(int procStartsOn) {
-        this.procStartsOn = procStartsOn;
+    public void setProcTime(int procTime) {
+        this.procTime = procTime;
     }
 
-    public int getProcEndsOn() {
-        return procEndsOn;
+    public int getAssemTime() {
+        return assemTime;
     }
 
-    public void setProcEndsOn(int procEndsOn) {
-        this.procEndsOn = procEndsOn;
+    public void setAssemTime(int assemTime) {
+        this.assemTime = assemTime;
     }
 
-    public int getAssemStartsOn() {
-        return assemStartsOn;
+    public int getSlipNumber() {
+        return slipNumber;
     }
 
-    public void setAssemStartsOn(int assemStartsOn) {
-        this.assemStartsOn = assemStartsOn;
+    public void setSlipNumber(int slipNumber) {
+        this.slipNumber = slipNumber;
     }
 
-    public int getAssemEndsOn() {
-        return assemEndsOn;
+    public static int getSumProc(LinkedList<Detail> list) {
+        int buf = 0;
+        for (Detail detail : list) {
+            buf += detail.getProcTime();
+        }
+        return buf;
     }
 
-    public void setAssemEndsOn(int assemEndsOn) {
-        this.assemEndsOn = assemEndsOn;
+    public static int getSumAssem(LinkedList<Detail> list) {
+        int buf = 0;
+        for (Detail detail : list) {
+            buf += detail.getAssemTime();
+        }
+        return buf;
+    }
+
+    public static int getGenProcTime(LinkedList<DetailGroup> groupList) {
+        int time = 0;
+        for (DetailGroup detailGroup : groupList) {
+            time += detailGroup.procTime;
+        }
+        return time;
+    }
+
+    @Override
+    public String toString() {
+        return details.toString();
     }
 }
