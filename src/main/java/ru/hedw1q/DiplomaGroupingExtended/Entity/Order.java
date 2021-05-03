@@ -2,10 +2,13 @@ package ru.hedw1q.DiplomaGroupingExtended.Entity;
 
 import java.util.List;
 
-public class Product {
+/**
+ * @author hedw1q
+ */
+public class Order {
     private int id;
     private String name;
-    private List<Detail> details;
+    private List<Product> products;
 
     public int getId() {
         return id;
@@ -23,11 +26,11 @@ public class Product {
         this.name = name;
     }
 
-    public List<Detail> getDetails() {
-        return details;
+    public List<Product> getProducts() {
+        return products;
     }
 
-    public void setDetails(List<Detail> details) {
-        this.details = details;
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 }

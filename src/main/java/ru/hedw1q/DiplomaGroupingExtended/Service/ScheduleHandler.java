@@ -153,6 +153,9 @@ public class ScheduleHandler {
                     else if (d.getProduct_id() == 2) secondSlipGroup.addDetail(d);
                     else if (d.getProduct_id() == 3) thirdSlipGroup.addDetail(d);
                     else throw new RuntimeException("Превышено количество доступных стапелей");
+                    firstSlipGroup.computeTimes();
+                    secondSlipGroup.computeTimes();
+                    thirdSlipGroup.computeTimes();
                 }
                 LinkedList<DetailGroup> groupList = new LinkedList<>(Arrays.asList(firstSlipGroup, secondSlipGroup, thirdSlipGroup));
 

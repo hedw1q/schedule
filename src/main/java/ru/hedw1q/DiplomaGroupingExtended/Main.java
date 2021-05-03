@@ -12,10 +12,9 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("/Main.fxml"));
         stage.setTitle("Группирование деталей для стапельной сборки");
-        stage.setScene(new Scene(root, 600, 500));
+        stage.setScene(new Scene(root));
         stage.show();
     }
-
-
-    public static void main(String[] args) { launch(args);}
+    @SuppressWarnings("")
+    public static void main(String[] args) { launch(args); }
 }

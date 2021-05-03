@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="94.0" prefWidth="602.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.hedw1q.DiplomaGroupingExtended.Controllers.ProductController">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="94.0" prefWidth="602.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.hedw1q.DiplomaGroupingExtended.Controllers.ProductController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="98.4" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="369.9999942779541" minWidth="10.0" prefWidth="352.4" />
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
   <rowConstraints>
     <RowConstraints maxHeight="127.4" minHeight="0.0" prefHeight="35.0" vgrow="SOMETIMES" />
@@ -15,10 +15,16 @@
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Label text="Имя изделия" />
+      <Label text="Наименование изделия">
+         <GridPane.margin>
+            <Insets left="5.0" />
+         </GridPane.margin></Label>
       <TextField fx:id="textProductName" text="Введите название изделия" GridPane.columnIndex="1" />
       <Button mnemonicParsing="false" onAction="#createNewProduct" text="Создать" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-      <Label layoutX="10.0" layoutY="20.0" text="Список деталей (id)" GridPane.rowIndex="1" />
+      <Label layoutX="10.0" layoutY="20.0" text="Детали" GridPane.rowIndex="1">
+         <GridPane.margin>
+            <Insets left="5.0" />
+         </GridPane.margin></Label>
       <TextField fx:id="textDetailList" layoutX="124.0" layoutY="16.0" text="Введите id деталей в порядке сборки" GridPane.columnIndex="1" GridPane.rowIndex="1" />
    </children>
 </GridPane>

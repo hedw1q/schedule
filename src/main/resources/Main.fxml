@@ -1,23 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400.0" minWidth="600.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.hedw1q.DiplomaGroupingExtended.Controllers.MainController">
+<GridPane alignment="CENTER" gridLinesVisible="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="700.0" prefWidth="500.0" style="-fx-background-color: #98EEFB;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.hedw1q.DiplomaGroupingExtended.Controllers.MainController">
   <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="511.4" minWidth="10.0" prefWidth="85.4" />
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="526.2000152587891" minWidth="10.0" prefWidth="451.4" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="511.4" minWidth="10.0" prefWidth="262.600015258789" />
   </columnConstraints>
   <rowConstraints>
     <RowConstraints maxHeight="126.4" minHeight="0.0" prefHeight="90.00000229477882" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="348.59999999999997" minHeight="10.0" prefHeight="109.5999977052212" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="348.59999999999997" minHeight="10.0" prefHeight="273.39999237060545" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="348.59999999999997" minHeight="10.0" prefHeight="102.59999999999998" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="348.59999999999997" minHeight="10.0" prefHeight="136.59999999999997" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="348.59999999999997" minHeight="10.0" prefHeight="200.60000000000002" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#redirectToProduct" text="Изделие" GridPane.halignment="CENTER" />
-      <Button mnemonicParsing="false" onAction="#redirectToDetail" text="Деталь" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-      <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#redirectToAnalysis" text="Анализ каркасов" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-      <ComboBox fx:id="productComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-      <Button mnemonicParsing="false" onAction="#createRandomDetails" text="Создать комплект деталей" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <VBox alignment="TOP_CENTER">
+         <children>
+            <Label alignment="TOP_CENTER" contentDisplay="CENTER" text="Создание изделий" textAlignment="CENTER">
+               <font>
+                  <Font name="System Italic" size="23.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="15.0" />
+               </VBox.margin>
+            </Label>
+            <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#redirectToProduct" prefHeight="49.0" prefWidth="190.0" text="Создать изделие" />
+         </children>
+      </VBox>
+      <VBox alignment="TOP_CENTER" GridPane.rowIndex="1">
+         <children>
+            <Label alignment="TOP_CENTER" contentDisplay="CENTER" text="Создание заказов" textAlignment="CENTER">
+               <font>
+                  <Font name="System Italic" size="23.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="15.0" />
+               </VBox.margin>
+            </Label>
+            <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#redirectToOrder" prefHeight="50.0" prefWidth="170.0" text="Создать заказ" />
+         </children>
+      </VBox>
+      <VBox GridPane.rowIndex="2">
+         <children>
+            <VBox alignment="TOP_CENTER" prefHeight="119.0" prefWidth="377.0">
+               <children>
+                  <Label alignment="TOP_CENTER" contentDisplay="CENTER" text="Создание комплектов деталей" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Italic" size="23.0" />
+                     </font>
+                  </Label>
+                  <Button alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#redirectToDetail" prefHeight="50.0" prefWidth="170.0" text="Создать деталь">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button alignment="CENTER_RIGHT" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#createRandomDetails" text="Генерация комплектов деталей">
+                     <VBox.margin>
+                        <Insets top="15.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+      <VBox alignment="TOP_CENTER" prefHeight="158.0" prefWidth="470.0" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+         <children>
+            <Label alignment="TOP_CENTER" contentDisplay="CENTER" text="Модуль планирования" textAlignment="CENTER">
+               <VBox.margin>
+                  <Insets bottom="8.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="System Italic" size="23.0" />
+               </font>
+            </Label>
+            <Label text="Выбор заказа">
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </Label>
+            <ComboBox fx:id="orderComboBox" prefWidth="150.0">
+               <VBox.margin>
+                  <Insets top="8.0" />
+               </VBox.margin>
+            </ComboBox>
+            <Button alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#planOrder" prefHeight="56.0" prefWidth="152.0" text="Планирование">
+               <VBox.margin>
+                  <Insets top="30.0" />
+               </VBox.margin></Button>
+         </children>
+      </VBox>
    </children>
+   <padding>
+      <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+   </padding>
 </GridPane>
