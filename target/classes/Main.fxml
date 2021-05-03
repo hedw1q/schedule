@@ -80,12 +80,12 @@
                   <Insets top="5.0" />
                </VBox.margin>
             </Label>
-            <ComboBox fx:id="productComboBox" prefWidth="150.0">
+            <ComboBox fx:id="orderComboBox" prefWidth="150.0">
                <VBox.margin>
                   <Insets top="8.0" />
                </VBox.margin>
             </ComboBox>
-            <Button alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#redirectToAnalysis" prefHeight="56.0" prefWidth="152.0" text="Планирование">
+            <Button alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#planOrder" prefHeight="56.0" prefWidth="152.0" text="Планирование">
                <VBox.margin>
                   <Insets top="30.0" />
                </VBox.margin></Button>

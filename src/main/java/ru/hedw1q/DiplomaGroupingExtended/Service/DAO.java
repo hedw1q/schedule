@@ -109,6 +109,21 @@ public class DAO {
         return productNames;
     }
 
+    public LinkedList<String> getDetailList() {
+        String SQL = "SELECT name FROM public.\"detail\"";
+        LinkedList<String> detailNames = new LinkedList<>();
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(SQL);
+            while (resultSet.next()) {
+                detailNames.add(resultSet.getString("name"));
+            }
+        } catch (Exception throwables) {
+            throwables.printStackTrace();
+        }
+        return detailNames;
+    }
+
     public LinkedList<Detail> getDetailsByProductId(int product_id) {
         String SQL = "SELECT id FROM public.\"detail\" WHERE product_id=?";
         LinkedList<Detail> details = new LinkedList<>();

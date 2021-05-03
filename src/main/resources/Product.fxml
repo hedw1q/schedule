@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="94.0" prefWidth="602.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.hedw1q.DiplomaGroupingExtended.Controllers.ProductController">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="602.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.hedw1q.DiplomaGroupingExtended.Controllers.ProductController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="98.4" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="369.9999942779541" minWidth="10.0" prefWidth="352.4" />
@@ -20,11 +20,20 @@
             <Insets left="5.0" />
          </GridPane.margin></Label>
       <TextField fx:id="textProductName" text="Введите название изделия" GridPane.columnIndex="1" />
-      <Button mnemonicParsing="false" onAction="#createNewProduct" text="Создать" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+      <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#createNewProduct" prefHeight="26.0" prefWidth="100.0" text="Создать" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
       <Label layoutX="10.0" layoutY="20.0" text="Детали" GridPane.rowIndex="1">
          <GridPane.margin>
             <Insets left="5.0" />
          </GridPane.margin></Label>
-      <TextField fx:id="textDetailList" layoutX="124.0" layoutY="16.0" text="Введите id деталей в порядке сборки" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+         <children>
+            <TextField fx:id="textDetailList" prefHeight="26.0" prefWidth="329.0" text="Введите наименования деталей в порядке сборки" />
+            <ComboBox fx:id="detailPicker" nodeOrientation="LEFT_TO_RIGHT" prefHeight="26.0" prefWidth="23.0" HBox.hgrow="NEVER">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </ComboBox>
+         </children>
+      </HBox>
    </children>
 </GridPane>

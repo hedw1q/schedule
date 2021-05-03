@@ -32,6 +32,7 @@ public class DetailController {
     @FXML
     ComboBox<String> detailComboBox;
 
+
     public void createNewDetail(ActionEvent event) {
         DAO dao = DAO.getInstance();
 
