@@ -1,33 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="269.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.hedw1q.DiplomaGroupingExtended.Controllers.DetailController">
-  <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-  </columnConstraints>
-  <rowConstraints>
-      <RowConstraints maxHeight="75.4" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="75.4" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="218.40000381469727" minHeight="0.0" prefHeight="33.400000000000006" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="218.40000381469727" minHeight="10.0" prefHeight="33.400000000000006" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="218.40000381469727" minHeight="10.0" prefHeight="33.400000000000006" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="306.3999847412109" minHeight="10.0" prefHeight="29.799999999999983" vgrow="SOMETIMES" />
-  </rowConstraints>
-   <children>
-      <Button mnemonicParsing="false" onAction="#createNewDetail" text="Создать" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
-      <TextField fx:id="detName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <Label text="Наименование детали" GridPane.rowIndex="1" />
-      <TextField fx:id="assemTime" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-      <Label text="Время сборки" GridPane.rowIndex="2" />
-      <Button mnemonicParsing="false" onAction="#getRandomNumbers" text="Случайно" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
-      <Label text="Обозначение" />
-      <TextField fx:id="detId" GridPane.columnIndex="1" />
-      <Label layoutX="10.0" layoutY="141.0" text="Маршрут детали" GridPane.rowIndex="3" />
-      <Label layoutX="10.0" layoutY="180.0" text="Время обработки детали на соответствующем станке" GridPane.rowIndex="4" />
-      <TextField fx:id="route" layoutX="310.0" layoutY="137.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-      <TextField fx:id="routeTimes" layoutX="310.0" layoutY="137.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-   </children>
-</GridPane>
+<BorderPane prefHeight="400.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.hedw1q.DiplomaGroupingExtended.Controllers.DetailController">
+   <center>
+      <GridPane alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="269.0" prefWidth="800.0" BorderPane.alignment="CENTER_LEFT">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints maxHeight="75.4" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="75.4" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="218.40000381469727" minHeight="0.0" prefHeight="33.400000000000006" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="218.40000381469727" minHeight="10.0" prefHeight="33.400000000000006" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="218.40000381469727" minHeight="10.0" prefHeight="33.400000000000006" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="306.3999847412109" minHeight="10.0" prefHeight="29.799999999999983" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Button alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#createNewDetail" text="Создать" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
+            <TextField fx:id="detName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="Наименование детали" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="20.0" />
+               </GridPane.margin></Label>
+            <TextField fx:id="assemTime" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label text="Время сборки" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets left="20.0" />
+               </GridPane.margin></Label>
+            <Label text="ID">
+               <GridPane.margin>
+                  <Insets left="20.0" />
+               </GridPane.margin></Label>
+            <TextField fx:id="detId" GridPane.columnIndex="1" />
+            <Label layoutX="10.0" layoutY="141.0" text="Маршрут детали" GridPane.rowIndex="3">
+               <GridPane.margin>
+                  <Insets left="20.0" />
+               </GridPane.margin></Label>
+            <Label layoutX="10.0" layoutY="180.0" text="Время обработки детали на соответствующем станке" GridPane.rowIndex="4">
+               <GridPane.margin>
+                  <Insets left="20.0" />
+               </GridPane.margin></Label>
+            <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <children>
+                  <TextField fx:id="route" prefHeight="26.0" prefWidth="325.0" />
+                  <ComboBox prefHeight="26.0" prefWidth="85.0" promptText="Станок" />
+               </children>
+            </HBox>
+            <TextField fx:id="routeTimes" layoutX="310.0" layoutY="137.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+         </children>
+      </GridPane>
+   </center>
+   <bottom>
+      <TableView fx:id="tableView" BorderPane.alignment="CENTER" />
+   </bottom>
+</BorderPane>

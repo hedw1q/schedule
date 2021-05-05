@@ -30,4 +30,9 @@ public class Product {
     public void setDetails(List<Detail> details) {
         this.details = details;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

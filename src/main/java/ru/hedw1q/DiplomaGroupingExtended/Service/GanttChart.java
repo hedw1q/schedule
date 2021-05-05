@@ -58,19 +58,19 @@ public class GanttChart extends JFrame {
 
         Task procTask = new Task("Механообработка",
                 Date.from(LocalDate.now().atTime(LocalTime.ofSecondOfDay(0)).atZone(ZoneId.systemDefault()).toInstant()),
-                Date.from(LocalDate.now().atTime(LocalTime.ofSecondOfDay(20 * 3600)).atZone(ZoneId.systemDefault()).toInstant())
+                Date.from(LocalDate.now().atTime(LocalTime.ofSecondOfDay(23 * 3600)).atZone(ZoneId.systemDefault()).toInstant())
         );
         Task assem1Task = new Task("Сборка: стапель 1",
                 Date.from(LocalDate.now().atTime(LocalTime.ofSecondOfDay(0)).atZone(ZoneId.systemDefault()).toInstant()),
-                Date.from(LocalDate.now().atTime(LocalTime.ofSecondOfDay(20 * 3600)).atZone(ZoneId.systemDefault()).toInstant())
+                Date.from(LocalDate.now().atTime(LocalTime.ofSecondOfDay(23 * 3600)).atZone(ZoneId.systemDefault()).toInstant())
         );
         Task assem2Task = new Task("Сборка: стапель 2",
                 Date.from(LocalDate.now().atTime(LocalTime.ofSecondOfDay(0)).atZone(ZoneId.systemDefault()).toInstant()),
-                Date.from(LocalDate.now().atTime(LocalTime.ofSecondOfDay(20 * 3600)).atZone(ZoneId.systemDefault()).toInstant())
+                Date.from(LocalDate.now().atTime(LocalTime.ofSecondOfDay(23 * 3600)).atZone(ZoneId.systemDefault()).toInstant())
         );
         Task assem3Task = new Task("Сборка: стапель 3",
                 Date.from(LocalDate.now().atTime(LocalTime.ofSecondOfDay(0)).atZone(ZoneId.systemDefault()).toInstant()),
-                Date.from(LocalDate.now().atTime(LocalTime.ofSecondOfDay(20 * 3600)).atZone(ZoneId.systemDefault()).toInstant())
+                Date.from(LocalDate.now().atTime(LocalTime.ofSecondOfDay(23 * 3600)).atZone(ZoneId.systemDefault()).toInstant())
         );
 //Это начало всех каркасов
         int procBuf = 0;
@@ -80,9 +80,9 @@ public class GanttChart extends JFrame {
         detailList.clear();
 
         for (int i = 1; i <= groupMap.keySet().size(); i++) {
-            if (assemBuf1 < procBuf) assemBuf1 = procBuf;
-            if (assemBuf2 < procBuf) assemBuf2 = procBuf;
-            if (assemBuf3 < procBuf) assemBuf3 = procBuf;
+            if (assemBuf1 < (procBuf + getGenProcTime(groupMap.get(i)))) assemBuf1 = procBuf + getGenProcTime(groupMap.get(i));
+            if (assemBuf2 < (procBuf + getGenProcTime(groupMap.get(i)))) assemBuf2 = procBuf + getGenProcTime(groupMap.get(i));
+            if (assemBuf3 < (procBuf + getGenProcTime(groupMap.get(i)))) assemBuf3 = procBuf + getGenProcTime(groupMap.get(i));
 
             // Это вообще для таблицы, в конце можно убрать
 
@@ -114,9 +114,15 @@ public class GanttChart extends JFrame {
                     Date.from(LocalDate.now().atTime(LocalTime.ofSecondOfDay(60 * (assemBuf3 + groupMap.get(i).get(2).getAssemTime()))).atZone(ZoneId.systemDefault()).toInstant())
             ));
 
-
+            System.out.println("group assem "+i+" starts "+assemBuf1);
+            System.out.println("group proc "+i+" starts "+procBuf);
             procBuf += getGenProcTime(groupMap.get(i));
+
+
             assemBuf1 += groupMap.get(i).get(0).getAssemTime();
+            System.out.println("group assem "+i+" ends "+assemBuf1);
+            System.out.println("group proc "+i+" ends "+procBuf);
+
             assemBuf2 += groupMap.get(i).get(1).getAssemTime();
             assemBuf3 += groupMap.get(i).get(2).getAssemTime();
             

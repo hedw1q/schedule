@@ -95,7 +95,7 @@ public class MainController implements Initializable {
         Map<Integer, LinkedList<DetailGroup>> groupMap = scheduleHandler.schedule(detailList);
 
         System.out.println(groupMap);
-
+        System.out.println(groupMap.get(groupMap.size()));
         new Planner().planOrder(new GanttChart("Диаграмма Гантта").getGanttChartTab(getCategoryDataset(groupMap, copyDetailList)),
                 createInfoTable(copyDetailList));
 
@@ -127,7 +127,6 @@ public class MainController implements Initializable {
         Tab tab1 = new Tab("Информация о деталях");
         tab1.setContent(tableView);
 
-        tableView.setEditable(true);
         return tab1;
     }
 
@@ -143,12 +142,15 @@ public class MainController implements Initializable {
             if (i >= 41 && i <= 60) detail.setProduct_id(3);
 
             detail.setName("Деталь №" + i);
-            detail.setAssemTime(random.nextInt(70) + 10);
-            //  detail.setProcTime(random.nextInt(25) + 5);
+            detail.setAssemTime(random.nextInt(60) + 25);
             detail.setOperations(generateRandomRoute());
             detail.setId(i);
             dao.createDetail(detail);
         }
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setContentText("Тестовые данные успешно созданы");
+        alert.setHeaderText(null);
+        alert.showAndWait();
     }
 
     public static List<Operation> generateRandomRoute() {

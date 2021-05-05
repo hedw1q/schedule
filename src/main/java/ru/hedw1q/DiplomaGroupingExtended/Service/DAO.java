@@ -213,6 +213,68 @@ public class DAO {
         }
         return detail;
     }
+public List<Product> getProductList(){
+    String SQL = "SELECT id FROM public.\"product\"";
+    LinkedList<Product> products = new LinkedList<>();
+    try {
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(SQL);
+        while (resultSet.next()) {
+            products.add(getProductById(Integer.parseInt(resultSet.getString("id"))));
+        }
+    } catch (Exception throwables) {
+        throwables.printStackTrace();
+    }
+    return products;
+}
+    public List<Order> getAllOrders(){
+        String SQL = "SELECT name FROM public.\"order\"";
+        LinkedList<Order> orders = new LinkedList<>();
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(SQL);
+            while (resultSet.next()) {
+                orders.add(getOrderByName(resultSet.getString("name")));
+            }
+        } catch (Exception throwables) {
+            throwables.printStackTrace();
+        }
+        return orders;
+    }
+
+
+    public Detail getDetailByName(String name) {
+        Detail detail = null;
+        String SQL = "SELECT * FROM public.\"detail\" where name=?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+            preparedStatement.setString(1, name);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+
+            detail = new Detail();
+            detail.setId(resultSet.getInt("id"));
+            detail.setProcTime(resultSet.getInt("proctime"));
+            detail.setAssemTime(resultSet.getInt("assemtime"));
+            detail.setName(name);
+            detail.setProduct_id(resultSet.getInt("product_id"));
+
+            Array array = resultSet.getArray("route");
+            Integer[] machineRoutesIds = (Integer[]) array.getArray();
+
+            Array array1 = resultSet.getArray("route_times");
+            Integer[] routeTimes = (Integer[]) array1.getArray();
+
+            List<Operation> operations = new LinkedList<>();
+            for (int i = 0; i < machineRoutesIds.length; i++) {
+                operations.add(new Operation(getMachineById(machineRoutesIds[i]), routeTimes[i]));
+            }
+            detail.setOperations(operations);
+        } catch (Exception throwables) {
+            throwables.printStackTrace();
+        }
+        return detail;
+    }
 
     public Machine getMachineById(int id) {
         Machine machine = null;
@@ -309,5 +371,20 @@ public class DAO {
             throwables.printStackTrace();
         }
         return order;
+    }
+
+    public List<Detail> getAllDetails(){
+        String SQL = "SELECT id FROM public.\"detail\"";
+        LinkedList<Detail> details = new LinkedList<>();
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(SQL);
+            while (resultSet.next()) {
+                details.add(getDetailById(Integer.parseInt(resultSet.getString("id"))));
+            }
+        } catch (Exception throwables) {
+            throwables.printStackTrace();
+        }
+        return details;
     }
 }

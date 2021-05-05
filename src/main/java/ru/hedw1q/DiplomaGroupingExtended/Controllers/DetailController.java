@@ -1,23 +1,23 @@
 package ru.hedw1q.DiplomaGroupingExtended.Controllers;
 
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import ru.hedw1q.DiplomaGroupingExtended.Entity.Detail;
 import ru.hedw1q.DiplomaGroupingExtended.Entity.Machine;
 import ru.hedw1q.DiplomaGroupingExtended.Entity.Operation;
 import ru.hedw1q.DiplomaGroupingExtended.Service.DAO;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import java.net.URL;
+import java.util.*;
 
 /**
  * @author hedw1q
  */
-public class DetailController {
+public class DetailController implements Initializable {
 
     @FXML
     TextField detName;
@@ -31,7 +31,8 @@ public class DetailController {
     TextField routeTimes;
     @FXML
     ComboBox<String> detailComboBox;
-
+@FXML
+    TableView<Detail> tableView;
 
     public void createNewDetail(ActionEvent event) {
         DAO dao = DAO.getInstance();
@@ -60,12 +61,30 @@ public class DetailController {
         alert.setHeaderText(null);
         alert.showAndWait();
     }
+    public void updateTable(){
+        DAO dao = DAO.getInstance();
 
-    public void getRandomNumbers(ActionEvent event){
-//        Random random=new Random();
-//        procTime.setText(String.valueOf(random.nextInt(25)+5));
-//        assemTime.setText(String.valueOf(random.nextInt(25)+5));
+        TableColumn<Detail, Integer> idCol = new TableColumn<>("ID Детали");
+        TableColumn<Detail, String> nameCol = new TableColumn<>("Наименование");
+        TableColumn<Detail, Integer> product_idCol = new TableColumn<>("ID изделия");
+        TableColumn<Detail, String> opCol = new TableColumn<>("Маршрут");
+        TableColumn<Detail, String> opTimeCol = new TableColumn<>("Времена обработки согласно маршруту");
+
+
+        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        product_idCol.setCellValueFactory(new PropertyValueFactory<>("product_id"));
+        opCol.setCellValueFactory(new PropertyValueFactory<>("route"));
+        opTimeCol.setCellValueFactory(new PropertyValueFactory<>("routeTimes"));
+
+
+        tableView.getColumns().addAll(idCol, nameCol, product_idCol, opCol, opTimeCol);
+        tableView.setItems(FXCollections.observableList(dao.getAllDetails()));
     }
 
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        updateTable();
+    }
 }
