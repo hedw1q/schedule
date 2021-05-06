@@ -33,7 +33,8 @@ public class DetailController implements Initializable {
     ComboBox<String> detailComboBox;
 @FXML
     TableView<Detail> tableView;
-
+@FXML
+ComboBox<String> machineComboBox;
     public void createNewDetail(ActionEvent event) {
         DAO dao = DAO.getInstance();
 
@@ -85,6 +86,8 @@ public class DetailController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        DAO dao=DAO.getInstance();
         updateTable();
-    }
+        List<String> list = dao.getAllMachinesNames();
+        machineComboBox.getItems().addAll(list);    }
 }

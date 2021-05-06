@@ -114,15 +114,10 @@ public class GanttChart extends JFrame {
                     Date.from(LocalDate.now().atTime(LocalTime.ofSecondOfDay(60 * (assemBuf3 + groupMap.get(i).get(2).getAssemTime()))).atZone(ZoneId.systemDefault()).toInstant())
             ));
 
-            System.out.println("group assem "+i+" starts "+assemBuf1);
-            System.out.println("group proc "+i+" starts "+procBuf);
             procBuf += getGenProcTime(groupMap.get(i));
 
 
             assemBuf1 += groupMap.get(i).get(0).getAssemTime();
-            System.out.println("group assem "+i+" ends "+assemBuf1);
-            System.out.println("group proc "+i+" ends "+procBuf);
-
             assemBuf2 += groupMap.get(i).get(1).getAssemTime();
             assemBuf3 += groupMap.get(i).get(2).getAssemTime();
             

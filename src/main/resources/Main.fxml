@@ -89,6 +89,19 @@
                <VBox.margin>
                   <Insets top="30.0" />
                </VBox.margin></Button>
+            <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" text="Количество доступных стапелей: ">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets bottom="5.0" />
+                     </padding>
+                  </Label>
+                  <TextField fx:id="textSlipNumber" prefHeight="26.0" prefWidth="32.0" text="3" />
+               </children>
+            </HBox>
          </children>
       </VBox>
    </children>

@@ -47,7 +47,7 @@
             <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <children>
                   <TextField fx:id="route" prefHeight="26.0" prefWidth="325.0" />
-                  <ComboBox prefHeight="26.0" prefWidth="85.0" promptText="Станок" />
+                  <ComboBox fx:id="machineComboBox" prefHeight="26.0" prefWidth="124.0" promptText="Станок" />
                </children>
             </HBox>
             <TextField fx:id="routeTimes" layoutX="310.0" layoutY="137.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />

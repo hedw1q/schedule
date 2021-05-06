@@ -387,4 +387,18 @@ public List<Product> getProductList(){
         }
         return details;
     }
+    public List<String> getAllMachinesNames(){
+        String SQL = "SELECT name FROM public.\"machine\"";
+        LinkedList<String> list = new LinkedList<>();
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(SQL);
+            while (resultSet.next()) {
+                list.add(resultSet.getString("name"));
+            }
+        } catch (Exception throwables) {
+            throwables.printStackTrace();
+        }
+        return list;
+    }
 }

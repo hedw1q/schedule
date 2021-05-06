@@ -26,6 +26,8 @@ public class MainController implements Initializable {
 
     @FXML
     ComboBox<String> orderComboBox;
+    @FXML
+    TextField textSlipNumber;
 
     @FXML
     public void redirectToProduct(ActionEvent event) throws Exception {
@@ -40,6 +42,7 @@ public class MainController implements Initializable {
             e.printStackTrace();
         }
     }
+
     @FXML
     public void redirectToOrder(ActionEvent event) throws Exception {
         try {
@@ -53,6 +56,7 @@ public class MainController implements Initializable {
             e.printStackTrace();
         }
     }
+
     @FXML
     public void redirectToDetail(ActionEvent event) throws Exception {
         try {
@@ -72,11 +76,9 @@ public class MainController implements Initializable {
         DAO dao = DAO.getInstance();
         ScheduleHandler scheduleHandler = ScheduleHandler.getInstance();
 
-
         LinkedList<Detail> detailList = new LinkedList<>();
-        Order order=dao.getOrderByName(orderComboBox.getValue());
-
-        int productCount=order.getProducts().size();
+        Order order = dao.getOrderByName(orderComboBox.getValue());
+        int slipCount= Integer.parseInt(textSlipNumber.getText());
 
         LinkedList<Detail> detA = new LinkedList<>(dao.getDetailsByProductId(1));
         LinkedList<Detail> detB = new LinkedList<>(dao.getDetailsByProductId(2));
